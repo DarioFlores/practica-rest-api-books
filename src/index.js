@@ -1,5 +1,6 @@
 const express = require('express')
 const morgan = require('morgan');
+const router = require('./router');
 
 const app = express()
 const port = 3000
