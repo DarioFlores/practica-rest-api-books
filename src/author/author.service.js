@@ -1,5 +1,6 @@
 const authors = require("../../authors.json");
 const bookService = require('../book/book.service');
+const lodash = require('lodash');
 const NotFoundException = require('../err/NotFoundException');
 const InternalException = require('../err/InternalException');
 
@@ -20,11 +21,9 @@ module.exports.find = () => {
 module.exports.findOne = (id) => {
     for (const author of authors) {
         if (author.id === id) {
-            const books = bookService.findByAuthor(id)
             return {
                 id: author.id,
-                name: author.name,
-                books
+                name: author.name
             };
         }
     }
@@ -36,7 +35,9 @@ module.exports.delete = (id) => {
         if (author.id === id) {
             const booksByAuthor = bookService.findByAuthor(id);
             if (booksByAuthor.length == 0) {
-                // Eliminar
+                lodash.remove(authors,(author) => {
+                    return author.id == id
+                })
                 return true
             } else {
                 throw new InternalException(`No se puede eliminar el autor ${author.name} porque hay libros a su nombre, elimine los libros antes`)

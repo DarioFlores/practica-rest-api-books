@@ -1,6 +1,8 @@
 const { Router } = require("express");
 const router = Router();
 const authorService = require("./author.service");
+const NotFoundException = require('../err/NotFoundException');
+const InternalException = require('../err/InternalException');
 
 router.post("", (req, res) => {
     if (req.body.name && req.body.name) {
@@ -61,13 +63,12 @@ router.delete("/:id", (req, res) => {
                 message: "You have successfully deleted the resources!",
             });
         } catch (error) {
-            console.log(typeof error)
-            if (typeof error == 'NotFoundException') {
+            if (error instanceof NotFoundException) {
                 return res.status(404).json({
                     message: error.message,
                 });
             }
-            if (typeof error == 'InternalException') {
+            if (error instanceof InternalException) {
                 return res.status(400).json({
                     message: error.message,
                 });

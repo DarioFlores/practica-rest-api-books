@@ -1,5 +1,6 @@
 const books = require("../../books.json");
 const authorService = require("../author/author.service");
+const lodash = require('lodash');
 const NotFoundException = require('../err/NotFoundException');
 
 
@@ -55,13 +56,12 @@ module.exports.findByAuthor = (authorId) => {
 };
 
 module.exports.delete = (id) => {
-    for (const book of books) {
-        if (book.id === id) {
-            // Eliminacion
-            return true;
-        }
+    const bookDelete = lodash.remove(books,(book) => {
+        return book.id == id
+    })
+    if (bookDelete.length == 0) {
+        throw new NotFoundException(`No se encontro libro con id: ${id}`)
     }
-    throw new NotFoundException(`No se encontro libro con id: ${id}`)
 };
 
 module.exports.update = (id, name, authorId) => {
