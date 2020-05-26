@@ -11,6 +11,9 @@ router.post("", (req, res) => {
                         req.body.name,
                         req.body.authorId
                     );
+                    return res.status(201).json({
+                        message: "You have successfully created the resource!",
+                    });
                 } catch (error) {
                     return res.status(404).json({
                         message: error.message,
